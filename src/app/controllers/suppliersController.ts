@@ -2,42 +2,43 @@ import { Request, Response } from 'express'
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
-import USER from '../models/User'
+import SUPPLIER from '../models/Supplier'
 import { Login } from '../models/interface'
 
-class UsersController {
+class SuppliersController {
     constructor() {}
 
     static async register(req: Request, res: Response) {
-        const newUser = new USER(req.body)
+        const body = req.body
+        const supplier = new SUPPLIER(body)
 
         try {
-            const savedUser = await newUser.save()
-            res.json(savedUser)
+            const newSupplier = await supplier.save()
+            res.json(newSupplier)
         } catch (error) {
             res.json(error)
         }
     }
 
     static async login(req: Request, res: Response) {
-        const userLoginData: Login = req.body
+        const supplierLoginData: Login = req.body
 
         try {
-            const user = await USER.findOne({ email: userLoginData.email })
+            const supplier = await SUPPLIER.findOne({ email: supplierLoginData.email })
 
-            if (!user) {
+            if (!supplier) {
                 res.json({ errors: 'Invalid ID or Password' })
             } else {
                 bcryptjs
-                    .compare(userLoginData.password, user.password)
+                    .compare(supplierLoginData.password, supplier.password)
                     .then((match) => {
                         if (match) {
-                            const tokenData = { id: user.id, isAdmin: user.isAdmin }
-                            const accessToken = jwt.sign(tokenData, 'e-commerce-user@#$', {
+                            const tokenData = { id: supplier.id, isAdmin: supplier.isAdmin }
+                            const token = jwt.sign(tokenData, 'e-commerce-user@#$', {
                                 expiresIn: '1d'
                             })
                             res.json({
-                                token: `Bearer ${accessToken}`
+                                token: `Bearer ${token}`
                             })
                         } else {
                             res.json({ errors: 'Invalid ID or Password' })
@@ -53,15 +54,15 @@ class UsersController {
     }
 
     static async update(req: Request<{ id: string }>, res: Response) {
-        const body = req.body
         const id = req.params.id
+        const body = req.body
 
         try {
-            const updatedUser = await USER.findByIdAndUpdate(id, body, {
+            const updatedSupplier = await SUPPLIER.findByIdAndUpdate(id, body, {
                 new: true,
                 runValidators: true
             }).select('-password')
-            res.json(updatedUser)
+            res.json(updatedSupplier)
         } catch (error) {
             res.json(error)
         }
@@ -71,12 +72,12 @@ class UsersController {
         const id = req.params.id
 
         try {
-            const user = await USER.findById(id).select('-password')
-            res.json(user)
+            const supplier = await SUPPLIER.findById(id).select('-password')
+            res.json(supplier)
         } catch (error) {
             res.json(error)
         }
     }
 }
 
-export default UsersController
+export default SuppliersController

@@ -9,6 +9,7 @@ class auth {
     constructor() {}
 
     static authenticate(req: Property, res: Response) {
+        console.log(req.headers)
         const auth = (req.headers as { token: string }).token
         const token = auth.split(' ')[1]
 

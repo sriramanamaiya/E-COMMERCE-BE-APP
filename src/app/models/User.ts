@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import mongoose from 'mongoose'
-import validator from 'validator'
+import isEmail from 'validator/lib/isEmail'
+import isNumeric from 'validator/lib/isNumeric'
 
 export interface User {
     name: string
@@ -26,7 +27,7 @@ const userSchema = new Schema<User>(
             unique: true,
             validate: {
                 validator: function (value: string) {
-                    return validator.isEmail(value)
+                    return isEmail(value)
                 },
                 message: function () {
                     return 'Invalid Email-ID'
@@ -46,7 +47,7 @@ const userSchema = new Schema<User>(
             maxlength: 10,
             validate: {
                 validator: function (value: string) {
-                    return validator.isNumeric(value)
+                    return isNumeric(value)
                 },
                 message: function () {
                     return 'Invalid Phone Number'
