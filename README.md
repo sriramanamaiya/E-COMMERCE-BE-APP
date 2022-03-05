@@ -8,4 +8,8 @@
 
 ## Manual Setup
 
+<<<<<<< HEAD
 -   Download the project folder, then run `npm start` to view the Project.
+=======
+-   Download the project folder, then run `npm run dev` to run Development server.
+>>>>>>> signin/up
