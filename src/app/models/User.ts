@@ -43,6 +43,7 @@ const userSchema = new Schema<User>(
         phoneNumber: {
             type: String,
             required: [true, 'Phone Number is Required'],
+            unique: true,
             minlength: 10,
             maxlength: 10,
             validate: {

@@ -8,9 +8,9 @@ export interface Supplier {
     name: string
     email: string
     password: string
+    phoneNumber: string
     companyName: string
     companyWebsite?: string
-    number: string
     isAdmin?: boolean
 }
 
@@ -45,11 +45,13 @@ const supplierSchema = new Schema<Supplier>(
         companyName: {
             type: String,
             required: [true, 'Company Name is Required'],
+            unique: true,
             minlength: 3,
             maxlength: 64
         },
         companyWebsite: {
             type: String,
+            unique: true,
             validate: {
                 validator: function (value: string) {
                     return isURL(value)
@@ -59,7 +61,7 @@ const supplierSchema = new Schema<Supplier>(
                 }
             }
         },
-        number: {
+        phoneNumber: {
             type: String,
             required: [true, 'Number is Required'],
             unique: true,
