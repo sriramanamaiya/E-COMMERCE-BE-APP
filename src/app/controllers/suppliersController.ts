@@ -13,7 +13,8 @@ class SuppliersController {
         const supplier = new SUPPLIER(body)
 
         try {
-            const newSupplier = await supplier.save()
+            const savedSupplier = await supplier.save()
+            const newSupplier = await SUPPLIER.findById(savedSupplier._id).select('-password')
             res.json(newSupplier)
         } catch (error) {
             res.json(error)

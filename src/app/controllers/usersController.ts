@@ -13,7 +13,8 @@ class UsersController {
 
         try {
             const savedUser = await newUser.save()
-            res.json(savedUser)
+            const newUserCreated = await USER.findById(savedUser._id).select('-password')
+            res.json(newUserCreated)
         } catch (error) {
             res.json(error)
         }
